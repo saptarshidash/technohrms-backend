@@ -20,4 +20,5 @@ public class LeaveSetupDto {
 
     private int pendingLeave;
 
+
 }

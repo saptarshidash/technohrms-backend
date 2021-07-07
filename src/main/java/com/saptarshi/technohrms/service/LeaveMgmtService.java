@@ -27,8 +27,8 @@ public class LeaveMgmtService {
         return repositoryService.getLeaveBalance(name, id);
     }
 
-    public CreateLeaveResponse createLeaveRequest(CreateLeaveRequest request){
-        return repositoryService.createLeaveRequest(request);
+    public CreateLeaveResponse createLeaveRequest(int id, CreateLeaveRequest request){
+        return repositoryService.createLeaveRequest(id, request);
     }
 
     public GetLeaveRequestResponse getAllLeaveRequest(){
@@ -41,6 +41,10 @@ public class LeaveMgmtService {
 
     public LeaveApprovalResponse makeLeaveApproval(LeaveApprovalRequest request){
         return repositoryService.makeLeaveApproval(request);
+    }
+
+    public UpdateLeaveResponse updateLeaveRequest(int id, UpdateLeaveRequest request){
+        return repositoryService.updateLeaveRequest(id, request);
     }
 
 }

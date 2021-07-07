@@ -31,29 +31,26 @@ public class AttendanceRepositoryServiceImpl implements AttendanceRepositoryServ
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         AddAttendanceResponse response;
         Attendance attendance;
-        if(attendanceRepository.existsAttendanceByDateAndEmployee(request.getDate(), request.getEmployee())){
+        Employee employee = employeeRepository.findEmployeeById(request.getEmployeeId()).get();
+        if(attendanceRepository.existsAttendanceByDateAndEmployee(request.getDate(), employee)){
              attendance = attendanceRepository
-                    .findAttendanceByEmployeeAndDate(request.getEmployee(), request.getDate()).get();
+                    .findAttendanceByEmployeeAndDate(employee, request.getDate()).get();
 
              if(attendance.getInTime() != null && attendance.getOutTime()!=null){
                  response = new AddAttendanceResponse("Attendance already made for the day");
                  return response;
-             }else if(attendance.getInTime()!=null && request.getInTime()!= null){
-                 response = new AddAttendanceResponse("In time attendance already made for the day");
-                 return response;
              }
 
-            attendance.setOutTime(new Time(request.getOutTime()));
+            attendance.setOutTime(new Time(request.getTime()));
             attendanceRepository.save(attendance);
             response = new AddAttendanceResponse("Attendance saved successfully");
             return response;
 
         }else{
-            if(request.getOutTime()!= null || request.getInTime() == null){
-                response = new AddAttendanceResponse("Set in time first");
-                return response;
-            }
+
             attendance = mapper.map(request, Attendance.class);
+            attendance.setDate(request.getDate());
+            attendance.setInTime(new Time(request.getTime()));
             attendance = attendanceRepository.save(attendance);
             return new AddAttendanceResponse("Attendance added successfully");
         }

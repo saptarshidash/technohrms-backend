@@ -1,8 +1,10 @@
 package com.saptarshi.technohrms.controller;
 
+import com.saptarshi.technohrms.entity.User;
 import com.saptarshi.technohrms.exchanges.auth.AuthRequest;
 import com.saptarshi.technohrms.exchanges.auth.AuthResponse;
 import com.saptarshi.technohrms.exchanges.auth.UserRegistrationRequest;
+import com.saptarshi.technohrms.repository.user.UserRepository;
 import com.saptarshi.technohrms.service.EmployeeMgmtService;
 import com.saptarshi.technohrms.service.MyUserDetailService;
 import com.saptarshi.technohrms.util.JwtUtil;
@@ -30,6 +32,9 @@ public class AuthController {
     EmployeeMgmtService employeeMgmtService;
 
     @Autowired
+    UserRepository userRepository;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
@@ -49,7 +54,10 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(token, userDetails.getUsername(), userDetails.getAuthorities()));
+        User user = userRepository.findByUsername(userDetails.getUsername()).get();
+
+        return ResponseEntity.ok(new AuthResponse(token, userDetails.getUsername(), userDetails.getAuthorities(),
+                user.getEmployee().getId()));
 
     }
 

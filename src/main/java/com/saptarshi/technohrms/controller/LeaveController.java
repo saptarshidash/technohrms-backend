@@ -3,6 +3,7 @@ package com.saptarshi.technohrms.controller;
 import com.saptarshi.technohrms.exchanges.leave.AddLeaveSetupRequest;
 import com.saptarshi.technohrms.exchanges.leave.CreateLeaveRequest;
 import com.saptarshi.technohrms.exchanges.leave.LeaveApprovalRequest;
+import com.saptarshi.technohrms.exchanges.leave.UpdateLeaveRequest;
 import com.saptarshi.technohrms.service.LeaveMgmtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,9 @@ public class LeaveController {
         return ResponseEntity.ok(leaveMgmtService.getLeaveBalance(leaveName, empId));
     }
 
-    @RequestMapping(value = "/leave/employee", method = RequestMethod.POST)
-    public ResponseEntity<?> createLeaveRequest(@RequestBody CreateLeaveRequest request){
-        return ResponseEntity.ok(leaveMgmtService.createLeaveRequest(request));
+    @RequestMapping(value = "/leave/employee/{id}", method = RequestMethod.POST)
+    public ResponseEntity<?> createLeaveRequest(@PathVariable("id") int id, @RequestBody CreateLeaveRequest request){
+        return ResponseEntity.ok(leaveMgmtService.createLeaveRequest(id, request));
     }
 
     @RequestMapping(value = "/leave/employee/requests", method = RequestMethod.GET)
@@ -48,6 +49,11 @@ public class LeaveController {
     @RequestMapping(value = "/leave/employee/request", method = RequestMethod.PATCH)
     public ResponseEntity<?> makeLeaveApproval(@RequestBody LeaveApprovalRequest request){
         return ResponseEntity.ok(leaveMgmtService.makeLeaveApproval(request));
+    }
+
+    @RequestMapping(value = "/leave/employee/request/{id}", method = RequestMethod.PATCH)
+    public ResponseEntity<?> updateLeaveRequest(@PathVariable(value = "id") Integer id,@RequestBody UpdateLeaveRequest request){
+        return ResponseEntity.ok(leaveMgmtService.updateLeaveRequest(id, request));
     }
 
 }

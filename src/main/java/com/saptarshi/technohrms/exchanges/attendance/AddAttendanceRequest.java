@@ -12,11 +12,9 @@ import java.sql.Date;
 @AllArgsConstructor
 public class AddAttendanceRequest {
 
-    private Employee employee;
+    private int employeeId;
 
     private Date date;
 
-    private Long inTime;
-
-    private Long outTime;
+    private Long time;
 }

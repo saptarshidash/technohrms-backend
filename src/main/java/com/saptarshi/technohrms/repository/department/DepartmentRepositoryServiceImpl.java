@@ -27,6 +27,7 @@ public class DepartmentRepositoryServiceImpl implements DepartmentRepositoryServ
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
         Department department = mapper.map(request, Department.class);
+        department.setTotalEmployee(0);
         department = departmentRepository.save(department);
 
         AddDepartmentResponse response = mapper.map(department, AddDepartmentResponse.class);

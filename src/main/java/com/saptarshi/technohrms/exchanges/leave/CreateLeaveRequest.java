@@ -12,8 +12,6 @@ import java.sql.Date;
 @AllArgsConstructor
 public class CreateLeaveRequest {
 
-    private Employee employee;
-
     private String leaveName;
 
     private Date startDate;

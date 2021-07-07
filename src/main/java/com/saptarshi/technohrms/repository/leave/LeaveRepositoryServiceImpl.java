@@ -93,17 +93,18 @@ public class LeaveRepositoryServiceImpl implements LeaveRepositoryService {
     }
 
     @Override
-    public CreateLeaveResponse createLeaveRequest(CreateLeaveRequest request) {
+    public CreateLeaveResponse createLeaveRequest(int id,CreateLeaveRequest request) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 
+        Employee employee = employeeRepository.findEmployeeById(id).get();
         LeaveRequest leaveRequest = mapper.map(request, LeaveRequest.class);
         LeaveSetup leaveSetup;
 
         try {
             leaveSetup = leaveRepository.findLeaveSetupByLeaveNameAndEmployee(
                     request.getLeaveName(),
-                    request.getEmployee()
+                    employee
             ).get();
         }catch (NoSuchElementException e){
             e.printStackTrace();
@@ -147,6 +148,7 @@ public class LeaveRepositoryServiceImpl implements LeaveRepositoryService {
             return response;
         }
             leaveRequest.setStatus("PENDING");
+            leaveRequest.setEmployee(employee);
             leaveRequest = leaveRequestRepository.save(leaveRequest);
             leaveSetup.setPendingLeave((int) (leaveSetup.getPendingLeave()+totalDays));
             leaveRepository.save(leaveSetup);
@@ -234,6 +236,22 @@ public class LeaveRepositoryServiceImpl implements LeaveRepositoryService {
         response.setMessage("Leave "+request.getStatus());
         return response;
 
+
+    }
+
+    @Override
+    public UpdateLeaveResponse updateLeaveRequest(int id, UpdateLeaveRequest request) {
+        ModelMapper mapper = new ModelMapper();
+        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
+
+        LeaveRequest leaveRequest = leaveRequestRepository.findLeaveRequestById(id).get();
+
+        leaveRequest.setReason(request.getReason());
+        leaveRequest.setStartDate(request.getStartDate());
+        leaveRequest.setEndDate(request.getEndDate());
+        leaveRequestRepository.save(leaveRequest);
+
+        return new UpdateLeaveResponse("Leave updated successfully");
 
     }
 }

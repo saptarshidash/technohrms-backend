@@ -14,13 +14,15 @@ public interface LeaveRepositoryService {
 
      Map<String , Integer> getLeaveBalance(String leaveName, Integer id);
 
-     CreateLeaveResponse createLeaveRequest(CreateLeaveRequest request);
+     CreateLeaveResponse createLeaveRequest(int empId, CreateLeaveRequest request);
 
      GetLeaveRequestResponse getAllLeaveRequest();
 
      GetLeaveRequestResponse getLeaveRequestByEmployee(Integer id);
 
      LeaveApprovalResponse makeLeaveApproval(LeaveApprovalRequest request);
+
+     UpdateLeaveResponse updateLeaveRequest(int id, UpdateLeaveRequest request);
 
 
 
